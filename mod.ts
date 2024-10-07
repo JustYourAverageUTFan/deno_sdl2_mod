@@ -12,7 +12,7 @@ import {
 
 let DENO_SDL2_PATH: string | undefined;
 try {
-  DENO_SDL2_PATH = Deno.env.get("DENO_SDL2_PATH");
+  DENO_SDL2_PATH = "./";
 } catch (_) {
   // ignore, this can only fail if permission is not given
 }
