@@ -291,6 +291,10 @@ const sdl2 = Deno.dlopen(getLibraryPath("SDL2"), {
     "parameters": ["buffer", "i32"],
     "result": "pointer",
   },
+  "SDL_SetWindowIcon": {
+    "parameters": ["pointer", "pointer"],
+    "result": "i32",
+  },
 });
 
 const SDL2_Image_symbols = {
@@ -1465,6 +1469,7 @@ enum WINDOW_FLAGS {
  */
 export class WindowBuilder {
   private flags: number = 0;
+  private window
   constructor(
     private title: string,
     private width: number,
@@ -1477,7 +1482,7 @@ export class WindowBuilder {
    */
   build(): Window {
     const title = asCString(this.title);
-    const window = sdl2.symbols.SDL_CreateWindow(
+    this.window = sdl2.symbols.SDL_CreateWindow(
       title,
       0x2FFF0000,
       0x2FFF0000,
@@ -1639,6 +1644,10 @@ export class WindowBuilder {
   /** window with transparent buffer */
   transparent(): WindowBuilder {
     this.flags |= WINDOW_FLAGS.TRANSPARENT;
+    return this;
+  }
+  setIcon(image: Texture): WindowBuilder {
+    sdl2.symbols.SDL_SetWindowIcon(this.window, image);
     return this;
   }
 }
